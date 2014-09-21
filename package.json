@@ -1,0 +1,32 @@
+{
+  "name": "phoenix",
+  "version": "0.1.0",
+  "description": "Mobile POS API",
+  "main": "app.js",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-clean": "^0.6.0",
+    "grunt-contrib-compress": "^0.11.0",
+    "grunt-contrib-copy": "^0.6.0",
+    "grunt-contrib-jshint": "^0.10.0",
+    "grunt-exec": "^0.4.6",
+    "grunt-jasmine-node": "^0.2.1",
+    "grunt-nsp-package": "0.0.5",
+    "load-grunt-tasks": "^0.6.0",
+    "time-grunt": "^1.0.0"
+  },
+  "dependencies": {
+    "colors": "^0.6.2",
+    "convict": "^0.4.2",
+    "jugglingdb": "^0.3.0",
+    "jugglingdb-postgres": "^0.1.0",
+    "lodash": "^2.4.1",
+    "node-statsd": "0.0.7",
+    "node-uuid": "^1.4.1",
+    "restify": "^2.8.2"
+  }
+}

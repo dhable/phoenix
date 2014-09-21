@@ -1,0 +1,383 @@
+#RAML 0.8
+---
+title: jetway Cloud Point of Sale
+baseUrl: http://api.jetway.io/{version}
+version: v1
+
+traits:
+   - secured:
+      description: Methods that require authentication.
+      queryParameters:
+         auth:
+            displayName: JWT Auth Token
+            type: string
+            description:
+            example: |
+               eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEyMzQ1Njc4OTAsIm5hbWUiOiJKb2huIERvZSIsImFkbWluIjp0cnVlfQ.eoaDVGTClRdfxUZXiPs3f8FmJDkDE_VCQFXqKxpLsts
+            required: true
+      responses:
+         401:
+            description: The JWT token presented was not valid.
+   - contextual:
+      description: A request that requires a consumer id in order to operate.
+      queryParameters:
+         consumer:
+            displayName: Consumer Id
+            type: string
+            description:
+            example: 25097c95-6778-48c0-a297-b571afada2c5
+            required: true
+
+
+/authenticate:
+   /user:
+      post:
+         description: |
+            Generates a JWT authentication token that should be included on secured API requests. This version of authenticate should only
+            be used for username / password authentication from web based portal properties. Mobile applications should use the 
+            /authenticate/app method for authentication.
+         request:
+            application/json:
+               example: |
+                  {
+                     "username": "jdoe@jetway.io",
+                     "password": "user input password"
+                  }
+         responses:
+            200:
+               body:
+                  application/json:
+                     example: {"jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEyMzQ1Njc4OTAsIm5hbWUiOiJKb2huIERvZSIsImFkbWluIjp0cnVlfQ.eoaDVGTClRdfxUZXiPs3f8FmJDkDE_VCQFXqKxpLsts"}
+            401:
+               body:
+                  application/json:
+                     example: {"message": "Invalid credentials"}
+   /app:
+      get:
+         description: |
+            Fetch a randomly generated authentication token for a mobile application to use. This token is then valid for the next
+            30 seconds. The mobile application needs to sign this token value using HMAC-512 with the private key that it was compiled 
+            with and post the resulting value to the same endpoint to obtian a JWT token.
+         responses:
+            200:
+               body:
+                  application/json:
+                     example: {"cnonce": "1773930990398726"}
+      post:
+         description: |
+            Takes a base64 HMAC SHA-512 signed cnonce obtained from previous get API request and will either approve the authentication request if
+            the private token is still valid in circulation and the cnonce was valid. Returns a JWT that should be used in subsequent requests
+            in the API.
+         request:
+            example: |
+               application/json:
+                  example: {"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"}
+         responses:
+             200:
+               body:
+                  application/json:
+                     example: {"jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEyMzQ1Njc4OTAsIm5hbWUiOiJKb2huIERvZSIsImFkbWluIjp0cnVlfQ.eoaDVGTClRdfxUZXiPs3f8FmJDkDE_VCQFXqKxpLsts"}
+            401:
+               body:
+                  application/json:
+                     example: {"message": "Invalid credentials"}
+
+
+/consumers:
+   post:
+      is: [ secured ]
+      description: |
+         Looks up a consumer's token identifier.
+      request:
+      responses:
+         200:
+            body:
+               application/json:
+                  example: {"consumerId": "25097c95-6778-48c0-a297-b571afada2c5"}
+   /{consumerId}:
+      get:
+         is: [ secured ]
+         description: |
+            Retrieve details about a particular consumer. This information does not contain any personal
+            identification information. It will, however, list all of the purchases made by a given
+            consumer and which stores they were made in.
+         responses:
+            200:
+               body:
+                  application/json:
+                     example: |
+                        [                        
+                           {
+                              "storeId": "073901ee-f3d9-4352-86a7-75be14a769c9",
+                              "sessionStart": "Mon Jan 31, 2015 11:23:00.321 UTC",
+                              "sessionEnd": "Tue Feb 1, 2015 04:03:11.092 UTC",
+                              "payment": {
+                              }
+                              "items": [
+                                 {"item": "805909454396", "qty": "2", "display": "85W MagSafe Power Adapter", "unit": "87.00", "price": "174.00", "tax": "17.40"}
+                              ]
+                           },
+                           {
+                           }
+                        ]
+            404:
+               description: No such consumer exists with that id.
+    
+
+
+/stores:
+   get:
+      is: [ secured ]
+      description: Retrieve details about a current partner store.
+      queryParameters:
+         loc:
+            displayName: ISO 6709 lattitude/longitude tuple
+            type: string
+            description: |
+               This is the decimal representation of the lat/long pair for global positioning coordinates. The pair of
+               decimal numbers is separated by a comma to make it a tuple.
+            example: 35.89421911,139.94637467
+            required: false
+         addr:
+            displayName: Store Postal Address
+            type: string
+            description:
+            example: 123 Main St, Seattle, WA 98107
+            required: false
+         limit:
+            displayName: Result set limit
+            type: integer
+            description: Specifies the number of records to return in a single result set.
+            required: false
+            default: 10
+            minimum: 5
+            maximum: 20
+            example: 10
+         page:
+            displayName: Result set current page count
+            type: integer
+            description: Specifies how many pages of the result set to skip.
+            required: false
+            default: 0
+            minimum: 0
+            example: 5
+      responses:
+         200:
+            body:
+               application/json:
+                  example: |
+                     [
+                        {
+                           "storeId": "073901ee-f3d9-4352-86a7-75be14a769c9",
+                           "name": "The Ridge IGA",
+                           "hours": [
+                              {"open": "0600", "close": "2230"},
+                              {"open": "0600", "close": "2230"},
+                              {"open": "0600", "close": "2230"},
+                              {"open": "0600", "close": "2230"},
+                              {"open": "0600", "close": "2230"},
+                              {"open": "0600", "close": "2230"},
+                              {"open": "0600", "close": "2230"},
+                           ],
+                           "location": {
+                              "lat": "35.89421911",
+                              "lng": "139.94637467",
+                              "street": "123 Main St",
+                              "city": "Seattle",
+                              "state": "WA",
+                              "postal": "98107",
+                              "country": "USA"
+                           },
+                           "phone": "206-555-1212"
+                        }
+                     ]
+
+   post:
+      is: [ secured ]
+      description: Create a new partner store location.
+      request:
+      responses:
+         200:
+            body:
+               application/json:
+                  example: {"storeId": "073901ee-f3d9-4352-86a7-75be14a769c9"}
+
+   /{storeId}:
+      get:
+         is: [ secured ]
+         description: Fetch the store details.
+         responses:
+            200:
+               body:
+                  application/json:
+                     example: |
+                        {
+                           "storeId": "073901ee-f3d9-4352-86a7-75be14a769c9",
+                           "name": "The Ridge IGA",
+                           "hours": [
+                              {"open": "0600", "close": "2230"},
+                              {"open": "0600", "close": "2230"},
+                              {"open": "0600", "close": "2230"},
+                              {"open": "0600", "close": "2230"},
+                              {"open": "0600", "close": "2230"},
+                              {"open": "0600", "close": "2230"},
+                              {"open": "0600", "close": "2230"},
+                           ],
+                           "location": {
+                              "lat": "35.89421911",
+                              "lng": "139.94637467",
+                              "street": "123 Main St",
+                              "city": "Seattle",
+                              "state": "WA",
+                              "postal": "98107",
+                              "country": "USA"
+                           },
+                           "phone": "206-555-1212"
+                        }
+
+      put:
+         is: [ secured ]
+         description: Update the dtore details.
+         responses:
+            200:
+               body:
+                  application/json:
+                     example: |
+                        {
+                           "storeId": "073901ee-f3d9-4352-86a7-75be14a769c9",
+                           "name": "The Ridge IGA",
+                           "hours": [
+                              {"open": "0600", "close": "2230"},
+                              {"open": "0600", "close": "2230"},
+                              {"open": "0600", "close": "2230"},
+                              {"open": "0600", "close": "2230"},
+                              {"open": "0600", "close": "2230"},
+                              {"open": "0600", "close": "2230"},
+                              {"open": "0600", "close": "2230"},
+                           ],
+                           "location": {
+                              "lat": "35.89421911",
+                              "lng": "139.94637467",
+                              "street": "123 Main St",
+                              "city": "Seattle",
+                              "state": "WA",
+                              "postal": "98107",
+                              "country": "USA"
+                           },
+                           "phone": "206-555-1212"
+                        }
+
+
+/carts:
+   /{storeId}:
+      get:
+         is: [ secured, contextual ]
+         description: Retrieve the contents of a shopping cart at a particular store.
+         responses:
+            200:
+               body:
+                  application/json:
+                     example: |
+                        [
+                           {"item": "805909454396", "qty": "2", "display": "85W MagSafe Power Adapter", "unit": "87.00", "price": "174.00", "tax": "17.40"}
+                        ]
+ 
+      put:
+         is: [ secured, contextual ]
+         description: |
+            Updates the contents of the cart. Remove items by setting the quantity to 0. You
+            can empty all of the contents from the cart by sending an empty array in JSON
+            body content.
+         request:
+            body:
+               application/json:
+                  example: |
+                     [
+                        {"item": "805909454396", "qty": "2"},
+                        {"item": "578839828392", "qty": "0"}
+                     ]
+         responses:
+            200:
+               body:
+                  application/json:
+                     example: |
+                        [
+                           {"item": "805909454396", "qty": "2", "display": "85W MagSafe Power Adapter", "unit": "87.00", "price": "174.00", "tax": "17.40"}
+                        ]
+
+      post:
+         is: [ secured, contextual ]
+         description: Checks out the content of the cart with the payment info.
+         request:
+         responses:
+            200:
+               description: |
+                  The purchase was completed successfully. The consumer is free to leave the store with their purchased items.
+
+            202: # additional check required
+               description: |
+                  The payment was succesfully accepted but the purchase requires an additional check with a staff member before
+                  the customer should leave the store.
+               body:
+                  application/json:
+                     example: |
+                        {
+                           "cnonce": ""
+                        }
+
+
+/transactions:
+   get:
+      is: [ secured ]
+      queryParameters:
+         store:
+            displayName: 
+            type: string
+            description:
+            example:
+            required: true
+         from:
+            displayName: Specify the date to include transactions from (endpoint inclusive).
+            type: date
+            description:
+            example: 
+            required: true
+         to:
+            displayName: Specify the date to include transactions until (endpoint exclusive).
+            type: date
+            description:
+            example:
+            required: false
+         total:
+            displayName: List of totals that should be included in the transactional information.
+            type: string
+            description:
+            example:
+            required: false
+      responses:
+         200:
+            body:
+               application/json:
+                  example: |
+                     [
+                        {
+                           "consumerId": "bc42a467-59f2-4813-8132-414cfac1838c",
+                           "sessionStart": "Mon Jan 31, 2015 11:23:00.321 UTC",
+                           "sessionEnd": "Tue Feb 1, 2015 04:03:11.092 UTC",
+                           "payment": {
+
+                           }
+                           "items": [
+                              {"item": "805909454396", "qty": "2", "display": "85W MagSafe Power Adapter", "unit": "87.00", "price": "174.00", "tax": "17.40"}
+                           ]
+                        },
+
+                        {
+                        }
+                     ]
+         413: # Request Entity Too Large
+            body:
+               application/json:
+                  example: |
+                     {"error": "Date range is too large."}
+
