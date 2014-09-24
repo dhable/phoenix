@@ -12,6 +12,9 @@ log.info("Bootstrapping jetway.io Phoenix, version %s", pkgMetadata.version);
 log.info("current working directory = %s", process.cwd());
 
 
+// TODO: This line is temporary. Currently using to execrise sequelize
+require("./lib/models");
+
 var services = [
    require("./lib/api")
 ];

@@ -21,13 +21,14 @@
     "time-grunt": "^1.0.0"
   },
   "dependencies": {
+    "change-case": "^2.1.5",
     "colors": "^0.6.2",
     "convict": "^0.4.2",
-    "jugglingdb": "^0.3.0",
-    "jugglingdb-postgres": "^0.1.0",
     "lodash": "^2.4.1",
     "node-statsd": "0.0.7",
     "node-uuid": "^1.4.1",
-    "restify": "^2.8.2"
+    "restify": "^2.8.2",
+    "sequelize": "^2.0.0-rc1",
+    "sqlite3": "^2.1.19"
   }
 }
