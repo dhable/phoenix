@@ -21,6 +21,7 @@
     "time-grunt": "^1.0.0"
   },
   "dependencies": {
+    "bcrypt": "^0.8.0",
     "change-case": "^2.1.5",
     "checkit": "^0.2.0-pre",
     "colors": "^0.6.2",
