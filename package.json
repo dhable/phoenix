@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "change-case": "^2.1.5",
+    "checkit": "^0.2.0-pre",
     "colors": "^0.6.2",
     "convict": "^0.4.2",
     "jsonwebtoken": "^1.1.2",
