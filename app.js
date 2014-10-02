@@ -15,7 +15,6 @@ log.info("current working directory = %s", process.cwd());
 // TODO: This line is temporary. Currently using to execrise sequelize
 require("./lib/models");
 require("./migrations").syncDb();
-return;
 
 var services = [
    require("./lib/api")
