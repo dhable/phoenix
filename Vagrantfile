@@ -13,8 +13,12 @@ apt-get install --assume-yes nodejs postgresql postgresql-contrib
 
 sudo -u postgres createdb jetway_pos 
 sudo -u postgres psql -U postgres postgres <<EOS
-  create user jetway password 'jetway'
+    create user jetway with password 'password';
+    grant all on database jetway_pos to jetway;
 EOS
+echo "host all all 0.0.0.0/0 password" >> /etc/postgresql/9.1/main/pg_hba.conf
+echo "listen_addresses = '*'" >> /etc/postgresql/9.1/main/postgresql.conf
+service postgresql restart
 
 npm install -g ndm
 EOL
