@@ -30,8 +30,8 @@
     "lodash": "^2.4.1",
     "node-statsd": "0.0.7",
     "node-uuid": "^1.4.1",
+    "pg": "^3.5.0",
     "restify": "^2.8.2",
-    "sequelize": "^2.0.0-rc1",
-    "sqlite3": "^2.1.19"
+    "sequelize": "^2.0.0-rc1"
   }
 }
