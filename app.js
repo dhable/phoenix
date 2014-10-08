@@ -35,7 +35,7 @@ exports.initDatabase = function(conf, done) {
         port = conf.get("postgres.port"),
         sqlEngine;
 
-    sqlEngine = new Sequelize(dbase, uname, pword, {
+    global.dbEngine = new Sequelize(dbase, uname, pword, {
         dialect: "postgres",
         host: host,
         port: port
@@ -43,7 +43,7 @@ exports.initDatabase = function(conf, done) {
 
     log.info("checking migrations on the database");
 
-    sqlEngine
+    dbEngine
         .getMigrator({path: path.join(__dirname, "migrations")})
         .migrate({method: "up"})
         .success(done)
