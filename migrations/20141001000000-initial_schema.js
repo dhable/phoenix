@@ -5,8 +5,8 @@ var Sequelize = require("sequelize");
  */
 module.exports = {
     up: function(migration, DataTypes, done) {
-        migration.createTable("Store", {
-            id:             { type: DataTypes.UUID, primaryKey: true, default: Sequelize.UUIDv4 },
+        migration.createTable("Stores", {
+            id:             { type: DataTypes.UUID, primaryKey: true },
             name:           { type: DataTypes.STRING(80), allowNull: false },
             phone:          { type: DataTypes.STRING(12) },
             website:        { type: DataTypes.STRING(255) },
@@ -19,8 +19,9 @@ module.exports = {
             zipcode:        { type: DataTypes.STRING(5) },
             zipplus:        { type: DataTypes.STRING(4) },
             timezone:       { type: DataTypes.STRING(120) },
-            created:        { type: DataTypes.INTEGER, allowNull: false },
-            deleted:        { type: DataTypes.INTEGER, allowNull: true}
+            createdAt:      { type: DataTypes.DATE, allowNull: false },
+            updatedAt:      { type: DataTypes.DATE, allowNull: false },
+            deletedAt:      { type: DataTypes.DATE }
         });
 
         migration.createTable("StoreConfig", {
