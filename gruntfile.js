@@ -63,7 +63,7 @@ module.exports = function(grunt) {
   });
 
   grunt.registerTask("test", ["jshint", "jasmine_node", "clean:testOutput"]);
-  grunt.registerTask("package", ["copy:app", "exec:dist_npm_install", "compress:app"]);
+  grunt.registerTask("package", ["copy:app", "compress:app"]);
   grunt.registerTask("release", ["clean", "test", "package"]);
 
   // alias default to test since that's most likely what we want to do.
