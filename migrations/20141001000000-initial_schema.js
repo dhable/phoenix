@@ -24,48 +24,60 @@ module.exports = {
             deletedAt:      { type: DataTypes.DATE }
         });
 
-        migration.createTable("StoreConfig", {
+        migration.createTable("StoreConfigs", {
             storeId:        { type: DataTypes.UUID, primaryKey: true },
             key:            { type: DataTypes.STRING(160), primaryKey: true },
-            value:          { type: DataTypes.STRING(160) }
+            value:          { type: DataTypes.STRING(160) },
+            createdAt:      { type: DataTypes.DATE, allowNull: false },
+            updatedAt:      { type: DataTypes.DATE, allowNull: false },
+            deletedAt:      { type: DataTypes.DATE }
         });
 
-        migration.createTable("StoreHour", {
+        migration.createTable("StoreHours", {
             storeId:        { type: DataTypes.UUID, primaryKey: true },
             dayOfWeek:      { type: DataTypes.INTEGER, primaryKey: true },
             localOpenHr:    { type: DataTypes.INTEGER },
             localOpenMin:   { type: DataTypes.INTEGER },
             localCloseHr:   { type: DataTypes.INTEGER },
-            localCloseMin:  { type: DataTypes.INTEGER }
+            localCloseMin:  { type: DataTypes.INTEGER },
+            createdAt:      { type: DataTypes.DATE, allowNull: false },
+            updatedAt:      { type: DataTypes.DATE, allowNull: false },
+            deletedAt:      { type: DataTypes.DATE }
         });
 
-        migration.createTable("StoreItem", {
+        migration.createTable("StoreItems", {
             storeId:        { type: DataTypes.UUID, primaryKey: true },
             itemId:         { type: DataTypes.STRING(48), primaryKey: true },
             description:    { type: DataTypes.STRING(60), allowNull: false  },
             qty:            { type: DataTypes.INTEGER, allowNull: false },
             amount:         { type: DataTypes.DECIMAL(8,2), allowNull: false },
             taxRate:        { type: DataTypes.DECIMAL(5,4), allowNull: false, default: 0.0 },
-            linkedItem:     { type: DataTypes.STRING(48), allowNull: true }
+            linkedItem:     { type: DataTypes.STRING(48), allowNull: true },
+            createdAt:      { type: DataTypes.DATE, allowNull: false },
+            updatedAt:      { type: DataTypes.DATE, allowNull: false },
+            deletedAt:      { type: DataTypes.DATE }
         });
 
-        migration.createTable("Consumer", {
+        migration.createTable("Consumers", {
             id:             { type: DataTypes.UUID, primaryKey: true },
             devicePrint:    { type: DataTypes.STRING, allowNull: false },
             email:          { type: DataTypes.STRING(80) },
             msisdn:         { type: DataTypes.STRING(40) },
-            parentConsumer: { type: DataTypes.UUID }
+            parentConsumer: { type: DataTypes.UUID },
+            createdAt:      { type: DataTypes.DATE, allowNull: false },
+            updatedAt:      { type: DataTypes.DATE, allowNull: false },
+            deletedAt:      { type: DataTypes.DATE }
         });
 
-        migration.createTable("Login", {
+        migration.createTable("Logins", {
             email:          { type: DataTypes.STRING(80), primaryKey: true },
             hashedPwd:      { type: DataTypes.STRING(512), allowNull: false },
-            created:        { type: DataTypes.INTEGER, allowNull: false },
-            updated:        { type: DataTypes.INTEGER, allowNull: true },
-            deleted:        { type: DataTypes.INTEGER, allowNull: true },
+            createdAt:      { type: DataTypes.DATE, allowNull: false },
+            updatedAt:      { type: DataTypes.DATE, allowNull: false },
+            deletedAt:      { type: DataTypes.DATE }
         });
 
-        migration.createTable("CartItem", {
+        migration.createTable("CartItems", {
             storeId:        { type: DataTypes.UUID, primaryKey: true },
             itemId:         { type: DataTypes.STRING(48), primaryKey: true },
             rawScan:        { type: DataTypes.STRING(48) },
@@ -74,15 +86,21 @@ module.exports = {
             price:          { type: DataTypes.DECIMAL(8,2), allowNull: false },
             subtotal:       { type: DataTypes.DECIMAL(8,2), allowNull: false },
             tax:            { type: DataTypes.DECIMAL(8,2), allowNull: false },
-            lastRefresh:    { type: DataTypes.INTEGER, allowNull: false }
+            lastRefresh:    { type: DataTypes.INTEGER, allowNull: false },
+            createdAt:      { type: DataTypes.DATE, allowNull: false },
+            updatedAt:      { type: DataTypes.DATE, allowNull: false },
+            deletedAt:      { type: DataTypes.DATE }
         });
 
-        migration.createTable("Transaction", {
+        migration.createTable("Transactions", {
             id:             { type: DataTypes.UUID, primaryKey: true },
             checkoutTime:   { type: DataTypes.INTEGER, allowNull: false },
             payType:        { type: DataTypes.STRING(12), allowNull: false },
             confirmation:   { type: DataTypes.STRING(255), allowNull: false },
             devicePrint:    { type: DataTypes.STRING, allowNull: false },
+            createdAt:      { type: DataTypes.DATE, allowNull: false },
+            updatedAt:      { type: DataTypes.DATE, allowNull: false },
+            deletedAt:      { type: DataTypes.DATE }
         });
 
         migration.createTable("TransactionItem", {
@@ -94,6 +112,9 @@ module.exports = {
             price:          { type: DataTypes.DECIMAL(8,2), allowNull: false },
             subtotal:       { type: DataTypes.DECIMAL(8,2), allowNull: false },
             tax:            { type: DataTypes.DECIMAL(8,2), allowNull: false },
+            createdAt:      { type: DataTypes.DATE, allowNull: false },
+            updatedAt:      { type: DataTypes.DATE, allowNull: false },
+            deletedAt:      { type: DataTypes.DATE }
         });
 
         done();
