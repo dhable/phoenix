@@ -23,4 +23,4 @@ _SpecRunner.html
 docs/api/
 release/
 dist/
-bullhorn.tgz
+npm-shrinkwrap.json
