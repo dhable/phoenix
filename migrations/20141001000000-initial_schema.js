@@ -61,8 +61,6 @@ module.exports = {
         migration.createTable("Consumers", {
             id:             { type: DataTypes.UUID, primaryKey: true },
             devicePrint:    { type: DataTypes.STRING, allowNull: false },
-            email:          { type: DataTypes.STRING(80) },
-            msisdn:         { type: DataTypes.STRING(40) },
             parentConsumer: { type: DataTypes.UUID },
             createdAt:      { type: DataTypes.DATE, allowNull: false },
             updatedAt:      { type: DataTypes.DATE, allowNull: false },
