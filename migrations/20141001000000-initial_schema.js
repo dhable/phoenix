@@ -92,6 +92,7 @@ module.exports = {
 
         migration.createTable("Transactions", {
             id:             { type: DataTypes.UUID, primaryKey: true },
+            consumer:       { type: DataTypes.UUID, allowNull: false },
             checkoutTime:   { type: DataTypes.INTEGER, allowNull: false },
             payType:        { type: DataTypes.STRING(12), allowNull: false },
             confirmation:   { type: DataTypes.STRING(255), allowNull: false },
