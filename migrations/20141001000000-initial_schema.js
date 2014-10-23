@@ -78,6 +78,7 @@ module.exports = {
         migration.createTable("CartItems", {
             storeId:        { type: DataTypes.UUID, primaryKey: true },
             itemId:         { type: DataTypes.STRING(48), primaryKey: true },
+            consumerId:     { type: DayaTypes.UUID, primaryKey: true },
             rawScan:        { type: DataTypes.STRING(48) },
             description:    { type: DataTypes.STRING(60), allowNull: false },
             qty:            { type: DataTypes.INTEGER, allowNull: false, default: 1 },
