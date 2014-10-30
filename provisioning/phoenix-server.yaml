@@ -1,0 +1,21 @@
+---
+- hosts: local_test
+  sudo: yes
+  roles:
+    - role: JasonGiedymin.nodejs 
+      nodejs_global_packages: ["ndm"] 
+
+    - role: ANXS.postgresql
+      postgresql_listen_addresses: ["*"]
+      postgresql_databases:
+        - name: "jetway_pos"
+      postgresql_users: 
+        - name: "jetway"
+          password: "jetway"
+      postgresql_pg_hba_custom:
+        - type: host
+          database: "jetway_pos"
+          user: "jetway"
+          address: "0.0.0.0/0"
+          method: "password"
+          comment: "Allow jetway database connections from anywhere"

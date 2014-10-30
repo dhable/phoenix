@@ -1,29 +1,6 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-
-# Shell script block to setup all non-Jetway services on the box.
-$boxSetup = <<EOL
-apt-get update
-apt-get install --assume-yes python-software-properties python g++ make git
-add-apt-repository --yes ppa:chris-lea/node.js
-
-apt-get update
-apt-get install --assume-yes nodejs postgresql postgresql-contrib
-
-sudo -u postgres createdb jetway_pos 
-sudo -u postgres psql -U postgres postgres <<EOS
-    create user jetway with password 'password';
-    grant all on database jetway_pos to jetway;
-EOS
-echo "host all all 0.0.0.0/0 password" >> /etc/postgresql/9.1/main/pg_hba.conf
-echo "listen_addresses = '*'" >> /etc/postgresql/9.1/main/postgresql.conf
-service postgresql restart
-
-npm install -g ndm
-EOL
-
-
 # Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
 VAGRANTFILE_API_VERSION = "2"
 
@@ -31,9 +8,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box = "precise64"
   config.vm.box_url = "http://files.vagrantup.com/precise64.box"
 
-  config.vm.network "forwarded_port", guest: 3000, host: 3333
+  config.vm.hostname = "api.local"
   config.vm.network "forwarded_port", guest: 5432, host: 5432
   config.vm.synced_folder ".", "/opt/jetway/phoenix"
 
-  config.vm.provision :shell, :inline => $boxSetup
+  config.vm.provision "ansible" do |ansible|
+    ansible.limit = "all"
+    ansible.inventory_path = "provisioning/hosts.ini"
+    ansible.playbook = "provisioning/phoenix-server.yaml"
+  end
 end

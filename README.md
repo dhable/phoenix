@@ -9,6 +9,7 @@ like Homebrew to install these packages.
 
 * node.js
 * grunt-cli
+* ansible
 * VirutalBox (required for Vagrant - not in Homebrew)
 * Vagrant (not in Homebrew)
 
@@ -18,9 +19,14 @@ or Stack Overflow if you have problems.
 
 ## Getting Started with the Project
 
-To start testing out the project, type ```vagrant up``` to boot a local PostgreSQL environment
-that's setup with the jetway_pos database and the jetway user. This should match the configuration
-default values so the app will connect to the DB without a problem.
+To start testing out the project, you'll first need to install all of the ansible third party
+packages that we depend upon. Simply execute ```ansible-galaxy install -r provisioning/requirements.txt```
+from the project root. If you have ansible installed correctly, this should install a series of
+ansible roles globally.
+
+Next you can build a virtual machine by type ```vagrant up```. This may take up to 10 minutes
+as this builds a new server box using the ansible scripts and the vagrant base image. When you're
+done, you should have a PostgreSQL DB and node.js installation in vagrant that you can use.
 
     NOTE: This will bind the PostgreSQL database to port 5432. If you have a local installation
     of PostgreSQL, the vagrant image may have trouble binding.
