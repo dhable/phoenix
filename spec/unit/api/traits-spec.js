@@ -1,5 +1,5 @@
 var jwt = require("jsonwebtoken"),
-    traits = require("../../lib/api/traits.js");
+    traits = require("../../../lib/api/traits.js");
 
 
 describe("The traits module", function() {

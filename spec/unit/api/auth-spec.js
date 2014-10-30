@@ -1,4 +1,4 @@
-var auth = require("../../lib/api/auth.js");
+var auth = require("../../../lib/api/auth.js");
 
 
 describe("The API auth module", function() {

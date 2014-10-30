@@ -1,4 +1,4 @@
-var moneyUtils = require("../lib/money-utils.js");
+var moneyUtils = require("../../lib/money-utils.js");
 
 
 describe("The moneyUtils module", function() {

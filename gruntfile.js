@@ -14,7 +14,9 @@ module.exports = function(grunt) {
       src: source
     },
     jasmine_node: {
-      all: ["spec/"]
+      all: ["spec/"],
+      unitTests: ["spec/unit/"],
+      acceptanceTests: ["spec/acceptance/"]
     },
     clean: {
       testOutput: ["_SpecRunner.html", "*.log"],
@@ -60,10 +62,10 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.registerTask("test", ["jshint", "jasmine_node", "clean:testOutput"]);
+  grunt.registerTask("test:unit", ["jshint", "jasmine_node:unitTests", "clean:testOutput"]);
   grunt.registerTask("package", ["exec:npm_shrinkwrap", "copy:app", "compress:app"]);
   grunt.registerTask("release", ["clean", "test", "package"]);
 
   // alias default to test since that's most likely what we want to do.
-  grunt.registerTask("default", ["test"]);
+  grunt.registerTask("default", ["test:unit"]);
 };
