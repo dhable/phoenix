@@ -3,7 +3,7 @@
   sudo: yes
   roles:
     - role: JasonGiedymin.nodejs 
-      nodejs_global_packages: ["ndm", "forever"] 
+      nodejs_global_packages: ["ndm"]
 
     - role: ANXS.postgresql
       postgresql_listen_addresses: ["*"]
