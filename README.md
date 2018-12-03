@@ -3,6 +3,8 @@
 This is a revamp (from memory) of the mobile point of sale API layer, but this time written
 in node.js.
 
+__This project is no longer maintained.__
+
 ## Dev Env Setup
 
 There are a few tools that you'll need to install on your local machine before you can work
